@@ -87,9 +87,9 @@ def merge_data(users, products, sessions):
 
 
 def read_and_parse_data():
-    users_file = "data/raw_v2/users.jsonl"
-    products_file = "data/raw_v2/products.jsonl"
-    sessions_file = "data/raw_v2/sessions.jsonl"
+    users_file = "../data/raw_v2/users.jsonl"
+    products_file = "../data/raw_v2/products.jsonl"
+    sessions_file = "../data/raw_v2/sessions.jsonl"
 
     users_df = pd.read_json(users_file, lines=True)
     products_df = pd.read_json(products_file, lines=True)

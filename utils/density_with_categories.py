@@ -1,6 +1,6 @@
 import csv
 parse_data = []
-with open('data/data_with_categories.csv') as f:
+with open('../data/data_with_categories.csv') as f:
     reader = csv.reader(f, delimiter=',')
     for line in reader:
         parse_data.append(line)

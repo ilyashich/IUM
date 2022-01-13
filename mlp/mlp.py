@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 
 class MLP:
@@ -10,22 +11,35 @@ class MLP:
         self.__mlp.fit(X, y)
 
     def mlp_get_score(self, X, y):
-        return self.__mlp.score(X, y)
+        y_pred = self.mlp_predict(X)
+        return accuracy_score(y, y_pred)
 
     def mlp_predict(self, X):
-        return self.__mlp.predict(X)
+        pred_proba = self.__mlp.predict_proba(X)
+        y_pred = []
+        for prediction in pred_proba:
+            if prediction[1] < 0.65:
+                y_pred.append(0)
+            else:
+                y_pred.append(1)
+        return y_pred
+
+
+def read_data():
+    data = pd.read_csv("../data/data_with_categories.csv")
+    col_to_predict = "successful"
+    col_user_id = "user_id"
+
+    y = data[col_to_predict]
+    X = data.drop([col_to_predict, col_user_id], axis=1)
+    return X, y
 
 
 if __name__ == '__main__':
-    data = pd.read_csv('../data/data_with_categories.csv')
+    X, y = read_data()
 
-    training_set, validation_set = train_test_split(data, test_size=0.2, random_state=21)
-    X_train = training_set.iloc[:, training_set.columns != 'successful'].values
-    y_train = training_set.iloc[:, 3].values
-    X_test = validation_set.iloc[:, validation_set.columns != 'successful'].values
-    y_test = validation_set.iloc[:, 3].values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=21)
 
     mlp = MLP(X_train, y_train)
-    y_pred = mlp.mlp_predict(X_test)
 
-    print("Accuracy of MLPClassifier : ", round(mlp.mlp_get_score(X_test, y_test), 4))
+    print("Accuracy of MLPClassifier : ", mlp.mlp_get_score(X_test, y_test))

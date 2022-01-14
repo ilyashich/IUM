@@ -36,10 +36,9 @@ class Controller:
 
         data = pd.read_csv("../data/data_with_categories.csv")
         col_to_predict = "successful"
-        col_user_id = "user_id"
 
         y = data[col_to_predict]
-        X = data.drop([col_to_predict, col_user_id], axis=1)
+        X = data.drop([col_to_predict], axis=1)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=21)
 
         self.__dummy_model = NaiveClassifier(X_train, y_train)

@@ -28,10 +28,9 @@ class MLP:
 def read_data():
     data = pd.read_csv("../data/data_with_categories.csv")
     col_to_predict = "successful"
-    col_user_id = "user_id"
 
     y = data[col_to_predict]
-    X = data.drop([col_to_predict, col_user_id], axis=1)
+    X = data.drop([col_to_predict], axis=1)
     return X, y
 
 

@@ -65,5 +65,5 @@ if __name__ == "__main__":
     percent_mlp, sum_all_mlp, num_false_positive_mlp = predictions_stats(mlp_predict)
     percent_naive, sum_all_naive, num_false_positive_naive = predictions_stats(naive_predict)
 
-    print(f"Naive: accuracy: {percent_naive:.2f}% for {sum_all_naive} predictions, number of false positives: {num_false_positive_naive}")
+    print(f"Naive: accuracy: {percent_naive:.2f}% for {sum_all_naive} predictions")
     print(f"MLP: accuracy: {percent_mlp:.2f}% for {sum_all_mlp} predictions, number of false positives: {num_false_positive_mlp}")

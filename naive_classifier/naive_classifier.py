@@ -13,7 +13,7 @@ class NaiveClassifier:
         return self.__dummy_model.score(X, y)
 
     def dummy_classifier_predict(self, X):
-        return self.__dummy_model.predict(X)
+        return list(self.__dummy_model.predict(X))
 
 
 def read_data():

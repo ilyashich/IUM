@@ -1,8 +1,25 @@
+import json
 import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from mlp.mlp import MLP
 from naive_classifier.naive_classifier import NaiveClassifier
+
+
+def parse_data(json_input):
+    if isinstance(json_input, str):
+        parsed = json.loads(json_input)
+    else:
+        parsed = json.loads(json.dumps(json_input))
+    data = pd.DataFrame(parsed)
+
+    col_session_id = "session_id"
+    col_success = "successful"
+
+    session_id = data[col_session_id]
+    success = data[col_success]
+
+    return data.drop([col_session_id, col_success], axis=1), session_id, success
 
 
 class Controller:
@@ -20,28 +37,20 @@ class Controller:
         self.__dummy_model = NaiveClassifier(X_train, y_train)
         self.__mlp = MLP(X_train, y_train)
 
-    def handle_predict_request(self, json_input):
-        col_model = "model"
-        col_session_id = "session_id"
-        col_success = "successful"
+    def predict_mlp(self, json_input):
+        data_input, session_id, success = parse_data(json_input)
 
-        model = json_input[col_model]
-        session_id = json_input[col_session_id]
-        success = json_input[col_success]
+        prediction = self.__mlp.mlp_predict(data_input)
 
-        json_input.pop(col_model)
-        json_input.pop(col_success)
-        json_input.pop(col_session_id)
+        logging.info(f"Model: MLP; {list(session_id.values)}; {prediction}; {list(success.values)}")
 
-        converted_input = pd.DataFrame([json_input])
+        return prediction
 
-        if model == 0:
-            prediction = self.__dummy_model.dummy_classifier_predict(converted_input)
-            group = "Naive"
-        else:
-            prediction = self.__mlp.mlp_predict(converted_input)
-            group = "MLP"
+    def predict_naive(self, json_input):
+        data_input, session_id, success = parse_data(json_input)
 
-        logging.info(f"Model: {group}, {session_id}, {prediction[0]}, {success}")
+        prediction = self.__dummy_model.dummy_classifier_predict(data_input)
 
-        return prediction[0]
+        logging.info(f"Model: Naive; {list(session_id.values)}; {prediction}; {list(success.values)}")
+
+        return prediction

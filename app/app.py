@@ -11,7 +11,7 @@ def predict_mlp():
     data = request.get_json(force=True)
     prediction = controller.predict_mlp(data)
 
-    return f"{{\"prediction\": \"{prediction}\"}}"
+    return prediction
 
 
 @app.route('/predict/naive', methods=['POST'])
@@ -19,7 +19,7 @@ def predict_naive():
     data = request.get_json(force=True)
     prediction = controller.predict_naive(data)
 
-    return f"{{\"prediction\": \"{prediction}\"}}"
+    return prediction
 
 
 if __name__ == '__main__':
